@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "Caja Cuadrada (rosas)",
+    "price": 25990,
+    "image": "/img/cuadrado.webp",
+    "category": "cajas",
+    "description": "Caja corazón premium con 9 rosas de tela. Ideal para aniversarios."
+  },
+  {
+    "id": 2,
+    "name": "Caja Rosa Eterna",
+    "price": 19990,
+    "image": "/img/exclusiva.webp",
+    "category": "cajas",
+    "description": "Caja minimalista redonda. Un detalle elegante y duradero."
+  },
+  {
+    "id": 3,
+    "name": "Bouquet Premium",
+    "price": 29990,
+    "image": "/img/rosaseternas2.jpg",
+    "category": "ramos",
+    "description": "Bouquet premium con personalización (nombre, inicial o fecha)."
+  },
+  {
+    "id": 4,
+    "name": "Cuadro Floral",
+    "price": 32990,
+    "image": "/img/blanco.jpg",
+    "category": "cuadros",
+    "description": "Cuadro floral artesanal con flores premium, totalmente personalizado."
+  },
+  {
+    "id": 5,
+    "name": "Inicial Floral Personalizada",
+    "price": 18990,
+    "image": "/img/Acuarella1.jpg",
+    "category": "acuarelas",
+    "description": "Letra inicial en acuarela floral, ideal para regalos personalizados."
+  },
+  {
+    "id": 6,
+    "name": "Ramo con Ferrero",
+    "price": 27990,
+    "image": "/img/ramorosas.jpg",
+    "category": "ramos",
+    "description": "Ramo de rosas con bombones Ferrero. Un regalo irresistible."
+  },
+  {
+    "id": 7,
+    "name": "Cuadro Floral Corazón",
+    "price": 34990,
+    "image": "/img/cuadro.jpg",
+    "category": "cuadros",
+    "description": "Cuadro floral artesanal en forma de corazón. Diseño exclusivo."
+  },
+  {
+    "id": 8,
+    "name": "Flores de Papel Decorativas",
+    "price": 14990,
+    "image": "/img/florespapel1.jpg",
+    "category": "decoracion",
+    "description": "Flores de papel artesanales para decoración o regalos únicos."
+  }
+]
