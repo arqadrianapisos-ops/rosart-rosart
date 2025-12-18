@@ -1,16 +1,41 @@
-# React + Vite
+# Rosart.store – Trabajo Práctico React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Proyecto desarrollado como trabajo práctico para la materia de Programación Web, con el objetivo de convertir una estructura basada en HTML en una aplicación desarrollada con React.
 
-Currently, two official plugins are available:
+## 🧩 Descripción
+Rosart.store es una aplicación web que simula una tienda online. El proyecto fue desarrollado utilizando React, aplicando conceptos como componentización, uso de props, manejo de estado y navegación mediante rutas.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Incluye un listado de productos, un carrito de compras, un formulario de contacto con opción de presupuestos y facturación, y una sección de cuenta para guardar datos básicos mediante localStorage.
 
-## React Compiler
+## 🚀 Tecnologías utilizadas
+- React
+- Vite
+- React Router
+- Context API
+- JavaScript
+- HTML5
+- CSS (estilos en línea)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📂 Funcionalidades principales
+- Navegación entre páginas sin recargar (SPA)
+- Listado de productos desde un archivo JSON
+- Carrito de compras con contador dinámico
+- Formulario de contacto y presupuesto
+- Sección de cuenta / facturación con almacenamiento local
+- Diseño simple y consistente en todas las vistas
 
-## Expanding the ESLint configuration
+## ▶️ Ejecución del proyecto
+Para ejecutar el proyecto de forma local:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+🌐 Versión online
+
+El proyecto fue probado y publicado para verificar su correcto funcionamiento:
+
+👉 https://graceful-syrniki-21c830.netlify.app/
+
+📝 Observaciones
+
+El proyecto cumple con los requisitos solicitados en la consigna del trabajo práctico
