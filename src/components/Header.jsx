@@ -2,21 +2,29 @@ import { NavLink } from "react-router-dom"
 import { useCart } from "../context/useCart.js"
 
 export default function Header({ onOpenCart }) {
-  const { items} = useCart()
+  const { items } = useCart()
 
-  const count = items.reduce((acc, item) => acc + Number((item && item.qty) || 0), 0)
+  const count = items.reduce(
+    (acc, item) => acc + Number((item && item.qty) || 0),
+    0
+  )
 
-    return (
+  return (
     <header style={styles.header}>
       <NavLink to="/" style={styles.logo}>
         Rosart.store
       </NavLink>
 
       <nav style={styles.nav}>
-        <NavLink to="/" style={linkStyle}>Nosotros</NavLink>
-        <NavLink to="/productos" style={linkStyle}>Productos</NavLink>
-        <NavLink to="/contacto" style={linkStyle}>Contacto</NavLink>
-        <NavLink to="/login" style={linkStyle}>Login</NavLink>
+        <NavLink to="/" style={linkStyle}>
+          Nosotros
+        </NavLink>
+        <NavLink to="/productos" style={linkStyle}>
+          Productos
+        </NavLink>
+        <NavLink to="/contacto" style={linkStyle}>
+          Contacto 
+        </NavLink>
       </nav>
 
       <button type="button" onClick={onOpenCart} style={styles.cartBtn}>

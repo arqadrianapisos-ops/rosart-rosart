@@ -1,316 +1,289 @@
 import { useMemo, useState } from "react"
 
-function Badge({ icon, text }) {
-  return (
-    <span style={styles.badge}>
-      <span aria-hidden="true">{icon}</span>
-      {text}
-    </span>
-  )
-}
-
-function InfoCard({ title, children }) {
-  return (
-    <div style={styles.card}>
-      <h3 style={styles.h3}>{title}</h3>
-      <div style={styles.cardBody}>{children}</div>
-    </div>
-  )
-}
-
 export default function Contact() {
-  const [form, setForm] = useState({
+  // Email guardado (si existe) para facturación
+  const storedUser = useMemo(() => localStorage.getItem("user") || "", [])
+
+  const [billingEnabled, setBillingEnabled] = useState(false)
+  const [sent, setSent] = useState(false)
+
+  // Consulta / Presupuesto (siempre disponible)
+  const [contact, setContact] = useState({
     name: "",
     email: "",
-    country: "",
-    subject: "Consulta general",
+    phone: "",
     message: "",
-    invoice: "No",
-    shipping: "Envío internacional",
-    payment: "Tarjeta",
   })
 
-  const onChange = (e) => {
+  // Datos de facturación (opcional)
+  const [billing, setBilling] = useState({
+    email: storedUser,
+    fullName: "",
+    dniCuit: "",
+    address: "",
+    city: "",
+  })
+
+  const onChangeContact = (e) => {
     const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+    setContact((prev) => ({ ...prev, [name]: value }))
+    setSent(false)
   }
 
-  const waText = useMemo(() => {
-    const lines = [
-      "Hola Rosart, quiero hacer una consulta:",
-      "",
-      `Nombre: ${form.name || "-"}`,
-      `Email: ${form.email || "-"}`,
-      `País/Ciudad: ${form.country || "-"}`,
-      `Asunto: ${form.subject || "-"}`,
-      "",
-      `Mensaje: ${form.message || "-"}`,
-      "",
-      "Preferencias:",
-      `• Forma de pago: ${form.payment}`,
-      `• Envío: ${form.shipping}`,
-      `• Necesito factura: ${form.invoice}`,
-    ]
-    return encodeURIComponent(lines.join("\n"))
-  }, [form])
+  const onChangeBilling = (e) => {
+    const { name, value } = e.target
+    setBilling((prev) => ({ ...prev, [name]: value }))
+    setSent(false)
+  }
 
+  const handleSaveBillingSession = () => {
+    if (billing.email) {
+      localStorage.setItem("user", billing.email)
+    }
+  }
+
+  const handleClearBillingSession = () => {
+    localStorage.removeItem("user")
+  }
+
+  
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    // Guardar contacto en LocalStorage
-    const payload = { id: Date.now(), createdAt: new Date().toISOString(), ...form }
-    const key = "rosart_contacts"
-    const prev = JSON.parse(localStorage.getItem(key) || "[]")
-    prev.push(payload)
-    localStorage.setItem(key, JSON.stringify(prev))
+    setSent(true)
 
-    // Limpiar formulario ✅
-    setForm({
+    // Limpiar consulta
+    setContact({
       name: "",
       email: "",
-      country: "",
-      subject: "Consulta general",
+      phone: "",
       message: "",
-      invoice: "No",
-      shipping: "Envío internacional",
-      payment: "Tarjeta",
     })
 
-    // Abrir WhatsApp
-    window.open(`https://wa.me/5491150518502?text=${waText}`, "_blank")
+    // Limpiar facturación SOLO al enviar
+    if (billingEnabled) {
+      setBilling({
+        email: localStorage.getItem("user") || "",
+        fullName: "",
+        dniCuit: "",
+        address: "",
+        city: "",
+      })
+      setBillingEnabled(false)
+    }
   }
 
   return (
-    <section style={styles.wrap}>
-      <h2 className="sectionTitle">Contacto</h2>
+    <section style={{ padding: 40, maxWidth: 920, margin: "0 auto" }}>
+      <h2 className="sectionTitle">Contacto </h2>
 
-      {/* Seguridad / confianza */}
-      <div style={styles.badgesRow}>
-        <Badge icon="🔒" text="Pago seguro" />
-        <Badge icon="🧾" text="Facturación" />
-        <Badge icon="🚚" text="Envíos internacionales" />
-        <Badge icon="🛡️" text="Garantía" />
-        <Badge icon="💬" text="Soporte" />
-      </div>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          marginTop: 18,
+          display: "grid",
+          gap: 16,
+          background: "#fff",
+          padding: 20,
+          borderRadius: 16,
+          boxShadow: "0 10px 22px rgba(0,0,0,.08)",
+        }}
+      >
+        {/* CONSULTA */}
+        <h3 style={{ margin: 0 }}>Consulta</h3>
 
-      <div style={styles.grid}>
-        {/* FORMULARIO */}
-        <div style={styles.card}>
-          <h3 style={styles.h3}>Formulario de contacto</h3>
+        <div style={row2}>
+          <label>
+            Nombre
+            <input
+              name="name"
+              value={contact.name}
+              onChange={onChangeContact}
+              required
+              style={input}
+            />
+          </label>
 
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.row2}>
-              <label style={styles.label}>
-                Nombre
-                <input name="name" value={form.name} onChange={onChange} style={styles.input} required />
-              </label>
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              value={contact.email}
+              onChange={onChangeContact}
+              required
+              style={input}
+            />
+          </label>
+        </div>
 
-              <label style={styles.label}>
-                Email
+        <div style={row2}>
+          <label>
+            Teléfono (opcional)
+            <input
+              name="phone"
+              value={contact.phone}
+              onChange={onChangeContact}
+              style={input}
+            />
+          </label>
+          <div />
+        </div>
+
+        <label>
+          Mensaje
+          <textarea
+            name="message"
+            rows={5}
+            value={contact.message}
+            onChange={onChangeContact}
+            required
+            style={{ ...input, resize: "vertical" }}
+          />
+        </label>
+
+        <div style={divider} />
+
+        {/* FACTURACIÓN */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <input
+            id="billingEnabled"
+            type="checkbox"
+            checked={billingEnabled}
+            onChange={(e) => setBillingEnabled(e.target.checked)}
+          />
+          <label htmlFor="billingEnabled">
+            Quiero cargar datos de facturación
+          </label>
+        </div>
+
+        {billingEnabled && (
+          <div style={{ display: "grid", gap: 14 }}>
+            <h3 style={{ margin: 0 }}>Datos para Presupuestos y/o facturación</h3>
+
+            <div style={row2}>
+              <label>
+                Email (facturación)
                 <input
-                  name="email"
                   type="email"
-                  value={form.email}
-                  onChange={onChange}
-                  style={styles.input}
-                  required
+                  name="email"
+                  value={billing.email}
+                  onChange={onChangeBilling}
+                  style={input}
                 />
               </label>
-            </div>
 
-            <div style={styles.row2}>
-              <label style={styles.label}>
-                País / Ciudad
+              <label>
+                Nombre / Razón social
                 <input
-                  name="country"
-                  value={form.country}
-                  onChange={onChange}
-                  style={styles.input}
-                  placeholder="Barcelona, España"
+                  name="fullName"
+                  value={billing.fullName}
+                  onChange={onChangeBilling}
+                  style={input}
+                />
+              </label>
+            </div>
+
+            <div style={row2}>
+              <label>
+                DNI / CUIT
+                <input
+                  name="dniCuit"
+                  value={billing.dniCuit}
+                  onChange={onChangeBilling}
+                  style={input}
                 />
               </label>
 
-              <label style={styles.label}>
-                Asunto
-                <select name="subject" value={form.subject} onChange={onChange} style={styles.input}>
-                  <option>Consulta general</option>
-                  <option>Pedido / Stock</option>
-                  <option>Envíos</option>
-                  <option>Facturación</option>
-                  <option>Personalización</option>
-                </select>
+              <label>
+                Ciudad
+                <input
+                  name="city"
+                  value={billing.city}
+                  onChange={onChangeBilling}
+                  style={input}
+                />
               </label>
             </div>
 
-            <div style={styles.row3}>
-              <label style={styles.label}>
-                Forma de pago
-                <select name="payment" value={form.payment} onChange={onChange} style={styles.input}>
-                  <option>Tarjeta</option>
-                  <option>Transferencia</option>
-                  <option>PayPal</option>
-                  <option>Mercado Pago</option>
-                </select>
-              </label>
-
-              <label style={styles.label}>
-                Envío
-                <select name="shipping" value={form.shipping} onChange={onChange} style={styles.input}>
-                  <option>Envío internacional</option>
-                  <option>Envío nacional</option>
-                  <option>Retiro en tienda</option>
-                  <option>A coordinar</option>
-                </select>
-              </label>
-
-              <label style={styles.label}>
-                ¿Necesito factura?
-                <select name="invoice" value={form.invoice} onChange={onChange} style={styles.input}>
-                  <option>Sí</option>
-                  <option>No</option>
-                </select>
-              </label>
-            </div>
-
-            <label style={styles.label}>
-              Mensaje
-              <textarea
-                name="message"
-                value={form.message}
-                onChange={onChange}
-                style={{ ...styles.input, minHeight: 120 }}
-                required
+            <label>
+              Dirección
+              <input
+                name="address"
+                value={billing.address}
+                onChange={onChangeBilling}
+                style={input}
               />
             </label>
 
-            <div style={styles.actions}>
-              <button type="submit" style={styles.primaryBtn}>
-                Enviar consulta
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <button type="button" style={btnOutline} onClick={handleSaveBillingSession}>
+                Guardar email
               </button>
 
-              <a
-                href={`https://wa.me/5491150518502?text=${waText}`}
-                target="_blank"
-                rel="noreferrer"
-                style={styles.secondaryBtn}
-              >
-                Abrir WhatsApp
-              </a>
+              <button type="button" style={btnOutline} onClick={handleClearBillingSession}>
+                Borrar email guardado
+              </button>
             </div>
-          </form>
-        </div>
+          </div>
+        )}
 
-        {/* INFO: pagos / envíos / facturación */}
-        <div style={{ display: "grid", gap: 18 }}>
-          <InfoCard title="Formas de pago">
-            <ul style={styles.ul}>
-              <li>Tarjeta (crédito / débito)</li>
-              <li>Transferencia bancaria</li>
-              <li>PayPal</li>
-              <li>Mercado Pago (según país)</li>
-            </ul>
-          </InfoCard>
+        <button type="submit" style={btnPrimary}>
+          Enviar consulta
+        </button>
 
-          <InfoCard title="Envíos">
-            <ul style={styles.ul}>
-              <li>Envíos nacionales e internacionales</li>
-              <li>Costos y tiempos según destino</li>
-              <li>Seguimiento cuando esté disponible</li>
-            </ul>
-          </InfoCard>
-
-          <InfoCard title="Facturación">
-            <p style={{ margin: 0, lineHeight: 1.7 }}>
-              Emitimos comprobante/factura. Si necesitás factura con datos fiscales,
-              indicá nombre/empresa, documento y dirección.
-            </p>
-          </InfoCard>
-        </div>
-      </div>
+        {sent && (
+          <div style={successBox}>
+            Gracias por tu mensaje. Te responderemos a la brevedad.
+          </div>
+        )}
+      </form>
     </section>
   )
 }
 
-const styles = {
-  wrap: { padding: 40, maxWidth: 1150, margin: "0 auto" },
+const row2 = {
+  display: "grid",
+  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+  gap: 14,
+}
 
-  badgesRow: {
-    display: "flex",
-    gap: 10,
-    flexWrap: "wrap",
-    margin: "10px 0 22px",
-    justifyContent: "center",
-  },
-  badge: {
-    display: "inline-flex",
-    gap: 8,
-    alignItems: "center",
-    border: "1px solid #eee",
-    background: "#fff",
-    color: "#7a3c3c",
-    borderRadius: 999,
-    padding: "8px 12px",
-    boxShadow: "0 10px 18px rgba(0,0,0,.06)",
-    fontSize: 14,
-  },
+const input = {
+  width: "100%",
+  marginTop: 6,
+  padding: "10px 12px",
+  borderRadius: 10,
+  border: "1px solid #ccc",
+  outline: "none",
+}
 
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "1.3fr 1fr",
-    gap: 18,
-  },
+const divider = {
+  height: 1,
+  background: "#eee",
+  margin: "6px 0",
+}
 
-  card: {
-    border: "1px solid #eee",
-    background: "#fff",
-    borderRadius: 18,
-    padding: 18,
-    boxShadow: "0 10px 22px rgba(0,0,0,.08)",
-    color: "#7a3c3c",
-  },
+const btnPrimary = {
+  border: "1px solid #111",
+  background: "#111",
+  color: "#fff",
+  borderRadius: 999,
+  padding: "10px 14px",
+  cursor: "pointer",
+}
 
-  h3: {
-    margin: "0 0 10px",
-    fontFamily: 'Georgia, "Times New Roman", serif',
-  },
+const btnOutline = {
+  border: "1px solid #111",
+  background: "#fff",
+  color: "#111",
+  borderRadius: 999,
+  padding: "10px 14px",
+  cursor: "pointer",
+}
 
-  cardBody: {},
-
-  form: { display: "grid", gap: 12 },
-
-  row2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  row3: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 },
-
-  label: { display: "grid", gap: 6, fontSize: 14 },
-
-  input: {
-    border: "1px solid #eee",
-    borderRadius: 12,
-    padding: "10px 12px",
-    outline: "none",
-    fontFamily: "inherit",
-  },
-
-  actions: { display: "flex", gap: 10, flexWrap: "wrap", marginTop: 6 },
-
-  primaryBtn: {
-    border: "1px solid #111",
-    background: "#111",
-    color: "#fff",
-    borderRadius: 999,
-    padding: "10px 14px",
-    cursor: "pointer",
-  },
-
-  secondaryBtn: {
-    textDecoration: "none",
-    border: "1px solid #111",
-    background: "#fff",
-    color: "#111",
-    borderRadius: 999,
-    padding: "10px 14px",
-    display: "inline-block",
-  },
-
-  ul: { margin: 0, paddingLeft: 18, lineHeight: 1.7 },
+const successBox = {
+  background: "#f2fbf5",
+  border: "1px solid #cfe9d6",
+  padding: 12,
+  borderRadius: 12,
 }

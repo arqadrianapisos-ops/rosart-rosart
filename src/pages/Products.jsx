@@ -1,6 +1,7 @@
 import products from "../data/products.json"
 import ProductCard from "../components/ProductCard"
 import { useCart } from "../context/useCart.js"
+import InfoCompra from "../components/InfoCompra.jsx"
 
 export default function Products() {
   const { addToCart } = useCart()
@@ -17,6 +18,11 @@ export default function Products() {
             onAdd={() => addToCart(p)}
           />
         ))}
+      </div>
+
+      {/* Información de Envíos / Pagos / Facturación */}
+      <div style={{ maxWidth: 1180, margin: "40px auto 0" }}>
+        <InfoCompra />
       </div>
     </section>
   )
