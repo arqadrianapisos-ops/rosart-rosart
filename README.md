@@ -30,6 +30,7 @@ Para ejecutar el proyecto de forma local:
 ```bash
 npm install
 npm run dev
+
 🌐 Versión online
 
 El proyecto fue probado y publicado para verificar su correcto funcionamiento:
