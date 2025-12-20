@@ -8,13 +8,13 @@ Rosart.store es una aplicación web que simula una tienda online. El proyecto fu
 Incluye un listado de productos, un carrito de compras, un formulario de contacto con opción de presupuestos y facturación, y una sección de cuenta para guardar datos básicos mediante localStorage.
 
 ## 🚀 Tecnologías utilizadas
-- React
-- Vite
-- React Router
-- Context API
-- JavaScript
-- HTML5
-- CSS (estilos en línea)
+- `React`
+- `Vite`
+- `React Router`
+- `Context API`
+- `JavaScript`
+- `HTML5`
+- `CSS` (estilos en línea)
 
 ## 📂 Funcionalidades principales
 - Navegación entre páginas sin recargar (SPA)
